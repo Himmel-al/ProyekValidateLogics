@@ -26,7 +26,7 @@ class AuthController extends Controller
         // Evaluasi Nilai Kebenaran Proposisi
         $p = ($user !== null); // Username benar
         $q = $p && (User::customDecrypt($user->password) === $request->password); // Password benar
-        $r = $p && ($user->is_active == 1); // Status aktif
+        $r = $p && ($user->is_active === true);
 
         // Cek jika p, q, r terpenuhi
         if ($p && $q && $r) {

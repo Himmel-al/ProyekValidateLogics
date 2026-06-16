@@ -28,5 +28,12 @@ class DatabaseSeeder extends Seeder
             'role_id' => $userRole->id,
             'is_active' => true
         ]);
+
+        User::create([
+            'username' => 'siti_blokir',
+            'password' => User::customEncrypt('siti123'),
+            'role_id' => $userRole->id,
+            'is_active' => false
+        ]);
     }
 }
