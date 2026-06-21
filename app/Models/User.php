@@ -3,16 +3,30 @@ namespace App\Models;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-
 class User extends Authenticatable
 {
-    protected $fillable = ['username', 'password', 'role_id', 'is_active'];
+    protected $fillable = [
+        'username',
+        'password',
+        'role_id',
+        'email',
+        'email_verified',
+        'is_active',
+        'otp_code',
+        'otp_expired_at',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'email_verified' => 'boolean',
+        'otp_expired_at' => 'datetime',
+    ];
 
     // Menghubungkan User ke jajaran Himpunan Peran (Role)
-    public function role()
-    {
-        return $this->belongsTo(Role::class);
-    }
+    // public function role()
+    // {
+    //     return $this->belongsTo(Role::class);
+    // }
 
     // --- FITUR KRIPTOGRAFI MATEMATIKA DISKRIT ---
     // Caesar Cipher Sederhana: Menggeser nilai ASCII karakter sebesar +7 (Mod 256)
@@ -36,5 +50,24 @@ class User extends Authenticatable
             $decrypted .= chr((ord($char) - $key + 256) % 256);
         }
         return $decrypted;
+    }
+
+    // Mengecek apakah user sudah verifikasi email
+    public function hasVerifiedEmail()
+    {
+        return $this->email_verified === true;
+    }
+
+    // Mengecek apakah akun aktif
+    public function isActive()
+    {
+        return $this->is_active === true;
+    }
+
+    // Mengecek apakah OTP masih berlaku
+    public function isOtpValid()
+    {
+        return $this->otp_expired_at &&
+               now()->lt($this->otp_expired_at);
     }
 }

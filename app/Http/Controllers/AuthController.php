@@ -1,17 +1,17 @@
 <?php
-
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use App\Mail\KirimOtpMail;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
     // Halaman Form Login Utama
-    public function showLogin() { return view('login'); }
+    public function showLogin()
+    {return view('login');}
 
     // Proses Validasi Login Tahap 1
     public function login(Request $request)
@@ -21,91 +21,203 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
 
-        $user = User::where('username', $request->username)->first();
+        $user = User::where(
+            'username',
+            $request->username
+        )->first();
 
-        // Evaluasi Nilai Kebenaran Proposisi
-        $p = ($user !== null); // Username benar
-        $q = $p && (User::customDecrypt($user->password) === $request->password); // Password benar
-        $r = $p && ($user->is_active === true);
+        // p = username ditemukan
+        $p = ($user !== null);
 
-        // Cek jika p, q, r terpenuhi
-        if ($p && $q && $r) {
-            $a = ($user->role->name === 'SuperAdmin'); // Apakah termasuk Himpunan SuperAdmin?
+        // q = password benar
+        $q = $p &&
+            (User::customDecrypt($user->password)
+            === $request->password);
 
-            if ($a) {
-                // JIKA SUPERADMIN, JANGAN LANGSUNG MASUK.
-                // Simpan ID user dulu di session sementara, lalu pindah ke halaman MINTA EMAIL.
-                session(['user_id_mencoba' => $user->id]);
-                return redirect()->route('otp.minta_email');
-            }
-
-            // Jika User biasa (Bukan SuperAdmin), langsung login sukses tanpa OTP
-            Auth::login($user);
-            return redirect()->route('dashboard');
+        if (! $p) {
+            return back()->withErrors([
+                'username' => 'Username salah! (p=False)',
+            ]);
         }
 
-        // Penanganan jika Salah Satu Proposisi Bernilai False
-        if (!$p) return back()->withErrors(['username' => 'Username salah! (p = False)']);
-        if (!$q) return back()->withErrors(['password' => 'Password salah! (q = False)']);
-        if (!$r) return back()->withErrors(['status' => 'Akun tidak aktif! (r = False)']);
-    }
+        if (! $q) {
+            return back()->withErrors([
+                'password' => 'Password salah! (q=False)',
+            ]);
+        }
 
-    // HALAMAN MINTA EMAIL UNTUK KIRIM OTP
-    public function showMintaEmail() { return view('otp_minta_email'); }
-
-    // PROSES MINTA EMAIL: GENERATE OTP, KIRIM EMAIL, PINDAH KE VERIFIKASI
-    public function prosesMintaEmail(Request $request)
-    {
-        $request->validate(['email_tujuan' => 'required|email']);
-
-        // Ambil ID User dari session tahap 1
-        $userId = session('user_id_mencoba');
-
-        // Generate Token OTP (Kombinatorika 6 digit)
-        $otpDibuat = rand(100000, 999999);
-
-        // --- PROSES KIRIM EMAIL ASLI ---
-        Mail::to($request->email_tujuan)->send(new KirimOtpMail($otpDibuat));
-
-        // Simpan OTP dan waktu kedaluwarsa ke Session
         session([
-            'otp_secret' => $otpDibuat,
-            'otp_expires_at' => now()->addMinutes(5),
-            // user_id_mencoba tetap di session
+            'user_id_mencoba' => $user->id,
         ]);
 
-        // Alihkan ke halaman INPUT OTP (Verifikasi)
-        return redirect()->route('otp.view');
-    }
+        // r = email sudah diverifikasi
+        $r = $user->email_verified;
 
-    // Halaman Input OTP
-    public function showOtp() { return view('otp'); }
-
-    // Proses Validasi OTP Tahap 2
-    public function verifyOtp(Request $request)
-    {
-        $request->validate(['otp_input' => 'required|numeric']);
-
-        $otpServer = session('otp_secret');
-        $waktuExpired = session('otp_expires_at');
-        $userId = session('user_id_mencoba');
-
-        $p = ($request->otp_input == $otpServer); // Konjungsi p: Angka cocok
-        $q = now()->lessThanOrEqualTo($waktuExpired); // Konjungsi q: Waktu valid
-
-        if ($p && $q) {
-            Auth::loginUsingId($userId);
-            session()->forget(['otp_secret', 'otp_expires_at', 'user_id_mencoba']);
-            return redirect()->route('dashboard');
+        if (! $r) {
+            return redirect()
+                ->route('email.form');
         }
 
-        if (!$p) return back()->withErrors(['otp_input' => 'Token OTP salah! (p = False)']);
-        if (!$q) return back()->withErrors(['otp_input' => 'Token OTP Kedaluwarsa! (q = False)']);
+        return redirect()
+            ->route('otp.kirim');
     }
 
-    // Halaman Dashboard Berhasil Masuk
-    public function dashboard() { return view('dashboard'); }
+    public function showEmailForm()
+    {
+        return view('email_form');
+    }
 
-    // Logout
-    public function logout() { Auth::logout(); return redirect()->route('login'); }
+    public function kirimVerifikasiEmail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $user = User::find(
+            session('user_id_mencoba')
+        );
+
+        $kode = rand(100000, 999999);
+
+        $user->email          = $request->email;
+        $user->otp_code       = $kode;
+        $user->otp_expired_at = now()->addMinutes(5);
+        $user->save();
+
+        Mail::to($user->email)
+            ->send(
+                new KirimOtpMail($kode)
+            );
+
+        return redirect()
+            ->route('email.verify.form');
+    }
+
+    public function showVerifyEmail()
+    {
+        return view('verify_email');
+    }
+
+    public function verifyEmail(Request $request)
+    {
+        $request->validate([
+            'otp_input' => 'required',
+        ]);
+
+        $user = User::find(
+            session('user_id_mencoba')
+        );
+
+        if (
+            $request->otp_input ==
+            $user->otp_code
+        ) {
+
+            $user->email_verified = true;
+            $user->is_active      = true;
+
+            $user->otp_code       = null;
+            $user->otp_expired_at = null;
+
+            $user->save();
+
+            return redirect()
+                ->route('otp.kirim');
+        }
+
+        return back()->withErrors([
+            'otp_input' => 'Kode verifikasi salah',
+        ]);
+    }
+
+    public function kirimOtpLogin()
+    {
+        $user = User::find(
+            session('user_id_mencoba')
+        );
+
+        $otp = rand(100000, 999999);
+
+        $user->otp_code       = $otp;
+        $user->otp_expired_at =
+        now()->addMinutes(5);
+
+        $user->save();
+
+        Mail::to($user->email)
+            ->send(
+                new KirimOtpMail($otp)
+            );
+
+        return redirect()
+            ->route('otp.view');
+    }
+
+    public function showOtp()
+    {
+        return view('otp');
+    }
+
+    public function verifyOtp(Request $request)
+    {
+        $request->validate([
+            'otp_input' => 'required',
+        ]);
+
+        $user = User::find(
+            session('user_id_mencoba')
+        );
+
+        // s = OTP cocok
+        $s = (
+            $request->otp_input ==
+            $user->otp_code
+        );
+
+        // t = OTP belum expired
+        $t = now()->lt(
+            $user->otp_expired_at
+        );
+
+        if ($s && $t) {
+
+            Auth::login($user);
+
+            $user->otp_code       = null;
+            $user->otp_expired_at = null;
+            $user->save();
+
+            session()->forget([
+                'user_id_mencoba',
+            ]);
+
+            return redirect()
+                ->route('dashboard');
+        }
+
+        if (! $s) {
+            return back()->withErrors([
+                'otp_input' => 'OTP salah! (s=False)',
+            ]);
+        }
+
+        if (! $t) {
+            return back()->withErrors([
+                'otp_input' => 'OTP kadaluarsa! (t=False)',
+            ]);
+        }
+    }
+
+    public function dashboard()
+    {
+        return view('dashboard');
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+
+        return redirect()
+            ->route('login');
+    }
 }

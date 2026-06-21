@@ -15,8 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('username')->unique();               // Proposisi p
             $table->string('password');                         // Proposisi q
-            $table->foreignId('role_id')->constrained('roles'); // Relasi Himpunan
-            $table->boolean('is_active')->default(true);        // Proposisi r
+            $table->string('email')->nullable();
+            $table->boolean('is_active')->default(false);        // Proposisi r
+            $table->boolean('email_verified')->default(false);
+            $table->string('otp_code')->nullable();
+            $table->dateTime('otp_expired_at')->nullable();
             $table->timestamps();
         });
 
