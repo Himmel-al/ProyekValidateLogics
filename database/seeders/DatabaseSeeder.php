@@ -13,7 +13,6 @@ class DatabaseSeeder extends Seeder
         User::create([
             'username'       => 'admin_server',
             'password'       => User::customEncrypt('rahasia123'),
-            // 'role_id'        => $superAdminRole->id,
             'email'          => 'ridho24ti@mahasiswa.pcr.ac.id',
             'email_verified' => true,
             'is_active'      => true,
@@ -24,7 +23,6 @@ class DatabaseSeeder extends Seeder
         User::create([
             'username' => 'hafis_user',
             'password' => User::customEncrypt('hafis123'),
-            // 'role_id' => $userRole->id,
             'email' => 'budi@gmail.com',
             'email_verified' => true,
             'is_active' => true,
@@ -35,7 +33,6 @@ class DatabaseSeeder extends Seeder
         User::create([
             'username' => 'lady_baru',
             'password' => User::customEncrypt('lady123'),
-            // 'role_id' => $userRole->id,
             'email' => null,
             'email_verified' => false,
             'is_active' => false,
@@ -46,7 +43,6 @@ class DatabaseSeeder extends Seeder
         User::create([
             'username' => 'najah_baru',
             'password' => User::customEncrypt('najah123'),
-            // 'role_id' => $userRole->id,
             'email' => null,
             'email_verified' => false,
             'is_active' => false,

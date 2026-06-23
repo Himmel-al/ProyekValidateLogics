@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
@@ -25,6 +24,7 @@ class KirimOtpMail extends Mailable
         return new Envelope(
             subject: 'Kode OTP Keamanan Portal Anda',
         );
+
     }
 
     // Menghubungkan ke View Tampilan Email
@@ -33,5 +33,16 @@ class KirimOtpMail extends Mailable
         return new Content(
             view: 'emails.otp', // Kita akan buat file view ini nanti
         );
+    }
+
+    public function build()
+    {
+        return $this
+            ->subject(
+                'Verifikasi Email'
+            )
+            ->view(
+                'emails.verify'
+            );
     }
 }

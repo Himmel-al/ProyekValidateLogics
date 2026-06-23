@@ -2,10 +2,12 @@
 namespace App\Http\Controllers;
 
 use App\Mail\KirimOtpMail;
+use App\Mail\VerifikasiEmail;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
@@ -72,26 +74,31 @@ class AuthController extends Controller
             session('user_id_mencoba')
         );
 
-        $kode = rand(100000, 999999);
+        $token = Str::random(64);
 
-        $user->email          = $request->email;
-        $user->otp_code       = $kode;
-        $user->otp_expired_at = now()->addMinutes(5);
+        $user->email = $request->email;
+
+        $user->email_verify_token = $token;
+
         $user->save();
+
+        $link = route(
+            'email.verify.link',
+            $token
+        );
 
         Mail::to($user->email)
             ->send(
-                new KirimOtpMail($kode)
+                new VerifikasiEmail($link)
             );
 
-        return redirect()
-            ->route('email.verify.form');
+        return back()->with(
+            'success',
+            'Link verifikasi telah dikirim'
+        );
     }
 
-    public function showVerifyEmail()
-    {
-        return view('verify_email');
-    }
+
 
     public function verifyEmail(Request $request)
     {
@@ -123,6 +130,37 @@ class AuthController extends Controller
         return back()->withErrors([
             'otp_input' => 'Kode verifikasi salah',
         ]);
+    }
+
+    public function verifyEmailByLink($token)
+    {
+        $user = User::where(
+            'email_verify_token',
+            $token
+        )->first();
+
+        if (! $user) {
+
+            abort(404);
+
+        }
+
+        $user->email_verified = true;
+
+        $user->email_verify_token = null;
+
+        $user->save();
+
+        session([
+            'user_id_mencoba' => $user->id,
+        ]);
+
+        return redirect()
+            ->route('otp.kirim')
+            ->with(
+                'success',
+                'Email berhasil diverifikasi'
+            );
     }
 
     public function kirimOtpLogin()
@@ -175,6 +213,14 @@ class AuthController extends Controller
         if ($s && $t) {
 
             Auth::login($user);
+
+            session()->put('analisis_login', [
+                'p'     => true,
+                'q'     => true,
+                'r'     => true,
+                's'     => $s,
+                'hasil' => true,
+            ]);
 
             $user->otp_code       = null;
             $user->otp_expired_at = null;
