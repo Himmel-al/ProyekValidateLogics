@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('username')->unique();               // Proposisi p
-            $table->string('password');                         // Proposisi q
+            $table->string('username')->unique();           // Proposisi p
+            $table->string('password');                     // Proposisi q
             $table->string('email')->nullable();
-            $table->boolean('is_active')->default(false);        // Proposisi r
+            $table->boolean('is_active')->default(false);   // Proposisi r
             $table->boolean('email_verified')->default(false);
             $table->string('otp_code')->nullable();
             $table->dateTime('otp_expired_at')->nullable();

@@ -5,34 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal Home Server - Login</title>
     <style>
-        /* RESET DASAR agar tampilan konsisten di semua browser */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Font modern */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background-color: #f0f2f5; /* Warna background abu-abu muda yang bersih */
+            background-color: #f0f2f5;
             display: flex;
-            justify-content: center; /* Pusat horizontal */
-            align-items: center;     /* Pusat vertikal */
-            min-height: 100vh;       /* Tinggi penuh layar */
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
 
-        /* DESAIN KARTU UTAMA (CARD) */
         .login-card {
             background: #ffffff;
             padding: 40px;
-            border-radius: 16px; /* Sudut tumpul yang modern */
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05); /* Bayangan halus */
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
             width: 100%;
-            max-width: 400px; /* Lebar maksimal kartu */
+            max-width: 400px;
             text-align: center;
         }
 
-        /* JUDUL */
         .login-card h2 {
             color: #1a1a1a;
             font-size: 24px;
@@ -41,45 +38,40 @@
             letter-spacing: -0.5px;
         }
 
-        /* CONTAINER FORM */
         .form-group {
-            text-align: left; /* Label teks rata kiri */
+            text-align: left;
             margin-bottom: 20px;
         }
 
-        /* LABEL (p) dan (q) */
         .form-group label {
             display: block;
             margin-bottom: 8px;
-            color: #4b5563; /* Warna abu-abu gelap untuk teks label */
+            color: #4b5563;
             font-size: 14px;
             font-weight: 500;
         }
 
-        /* DESAIN INPUT BOX */
         .form-group input[type="text"],
         .form-group input[type="password"] {
             width: 100%;
             padding: 12px 16px;
-            border: 1.5px solid #e5e7eb; /* Border halus */
+            border: 1.5px solid #e5e7eb;
             border-radius: 8px;
             font-size: 15px;
-            transition: all 0.2s ease; /* Animasi saat diklik */
+            transition: all 0.2s ease;
             background-color: #f9fafb;
         }
 
-        /* Efek saat Input diklik (Focus) */
         .form-group input:focus {
             outline: none;
-            border-color: #3b82f6; /* Warna biru Laravel/Tailwind */
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); /* Efek glow biru */
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
             background-color: #ffffff;
         }
 
-        /* DESAIN TOMBOL */
         .btn-submit {
             width: 100%;
-            background-color: #2563eb; /* Biru gelap */
+            background-color: #2563eb;
             color: white;
             border: none;
             padding: 14px;
@@ -91,12 +83,10 @@
             margin-top: 10px;
         }
 
-        /* Efek Tombol saat di-hover */
         .btn-submit:hover {
             background-color: #1d4ed8;
         }
 
-        /* GAYA UNTUK PESAN ERROR (Jika ada) */
         .error-message {
             color: #ef4444;
             background-color: #fef2f2;
@@ -113,7 +103,6 @@
     <div class="login-card">
         <h2>Portal Home Server</h2>
 
-        {{-- Menampilkan pesan error dari Laravel (p=false, q=false, dll) --}}
         @if($errors->any())
             <div class="error-message">
                 {{ $errors->first() }}
@@ -123,19 +112,16 @@
         <form action="{{ route('login.proses') }}" method="POST">
             @csrf
 
-            {{-- Input Username (p) --}}
             <div class="form-group">
                 <label for="username">Username (p):</label>
                 <input type="text" id="username" name="username" placeholder="Masukkan username Anda" required autocomplete="off">
             </div>
 
-            {{-- Input Password (q) --}}
             <div class="form-group">
                 <label for="password">Password (q):</label>
                 <input type="password" id="password" name="password" placeholder="Masukkan password Anda" required>
             </div>
 
-            {{-- Tombol Submit --}}
             <button type="submit" class="btn-submit">Evaluasi Login</button>
         </form>
     </div>

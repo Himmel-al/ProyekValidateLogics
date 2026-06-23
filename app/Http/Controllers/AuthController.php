@@ -9,11 +9,9 @@ use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
-    // Halaman Form Login Utama
     public function showLogin()
     {return view('login');}
 
-    // Proses Validasi Login Tahap 1
     public function login(Request $request)
     {
         $request->validate([
@@ -26,10 +24,8 @@ class AuthController extends Controller
             $request->username
         )->first();
 
-        // p = username ditemukan
         $p = ($user !== null);
 
-        // q = password benar
         $q = $p &&
             (User::customDecrypt($user->password)
             === $request->password);
@@ -50,7 +46,6 @@ class AuthController extends Controller
             'user_id_mencoba' => $user->id,
         ]);
 
-        // r = email sudah diverifikasi
         $r = $user->email_verified;
 
         if (! $r) {
@@ -168,13 +163,11 @@ class AuthController extends Controller
             session('user_id_mencoba')
         );
 
-        // s = OTP cocok
         $s = (
             $request->otp_input ==
             $user->otp_code
         );
 
-        // t = OTP belum expired
         $t = now()->lt(
             $user->otp_expired_at
         );
