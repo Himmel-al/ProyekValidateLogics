@@ -214,14 +214,6 @@ class AuthController extends Controller
 
             Auth::login($user);
 
-            session()->put('analisis_login', [
-                'p'     => true,
-                'q'     => true,
-                'r'     => true,
-                's'     => $s,
-                'hasil' => true,
-            ]);
-
             $user->otp_code       = null;
             $user->otp_expired_at = null;
             $user->save();

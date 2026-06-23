@@ -83,48 +83,45 @@
 
                     <div class="card-body">
 
-                        @php $analisis = session('analisis_login', [ 'p' => true, 'q' => true, 'r' => true, 's' => true, 'hasil' => true ]); @endphp
                         <table class="table table-bordered table-hover">
-
                             <thead class="table-light">
                                 <tr>
-                                    <th width="15%">Variabel</th>
+                                    <th>Variabel</th>
                                     <th>Keterangan</th>
-                                    <th width="20%">Nilai</th>
+                                    <th>Nilai</th>
                                 </tr>
                             </thead>
-
                             <tbody>
                                 <tr>
                                     <td>p</td>
                                     <td>Username ditemukan</td>
-                                    <td> <span class="{{ $analisis['p'] ? 'truth-value-true' : 'truth-value-false' }}">
-                                            {{ $analisis['p'] ? 'TRUE' : 'FALSE' }} </span> </td>
+                                    <td class="text-success fw-bold">TRUE</td>
                                 </tr>
                                 <tr>
                                     <td>q</td>
                                     <td>Password benar</td>
-                                    <td> <span class="{{ $analisis['q'] ? 'truth-value-true' : 'truth-value-false' }}">
-                                            {{ $analisis['q'] ? 'TRUE' : 'FALSE' }} </span> </td>
+                                    <td class="text-success fw-bold">TRUE</td>
                                 </tr>
                                 <tr>
                                     <td>r</td>
                                     <td>Email terverifikasi</td>
-                                    <td> <span class="{{ $analisis['r'] ? 'truth-value-true' : 'truth-value-false' }}">
-                                            {{ $analisis['r'] ? 'TRUE' : 'FALSE' }} </span> </td>
+                                    <td class="text-success fw-bold">TRUE</td>
                                 </tr>
                                 <tr>
                                     <td>s</td>
-                                    <td>OTP benar</td>
-                                    <td> <span class="{{ $analisis['s'] ? 'truth-value-true' : 'truth-value-false' }}">
-                                            {{ $analisis['s'] ? 'TRUE' : 'FALSE' }} </span> </td>
+                                    <td>Akun aktif</td>
+                                    <td class="text-success fw-bold">TRUE</td>
+                                </tr>
+                                <tr>
+                                    <td>t</td>
+                                    <td>OTP terverifikasi</td>
+                                    <td class="text-success fw-bold">TRUE</td>
                                 </tr>
                                 <tr class="table-success fw-bold">
-                                    <td colspan="2"> p ∧ q ∧ r ∧ s </td>
-                                    <td> {{ $analisis['hasil'] ? 'TRUE' : 'FALSE' }} </td>
+                                    <td colspan="2"> p ∧ q ∧ r ∧ s ∧ t </td>
+                                    <td> TRUE </td>
                                 </tr>
                             </tbody>
-
                         </table>
 
                     </div>
@@ -144,15 +141,17 @@
                         <div class="formula-box">
 
                             <h4 class="text-center">
-                                p ∧ q ∧ r ∧ s
+                                p ∧ q ∧ r ∧ s ∧ t
                             </h4>
 
                             <hr>
 
                             <p><b>p</b> = Username ditemukan</p>
                             <p><b>q</b> = Password benar</p>
-                            <p><b>r</b> = Akun aktif</p>
-                            <p><b>s</b> = OTP benar</p>
+                            <p><b>r</b> = Email terverifikasi</p>
+                            <p><b>s</b> = Akun status aktif</p>
+                            <p><b>t</b> = OTP Valid</p>
+
 
                         </div>
 
@@ -175,12 +174,13 @@
                 </p>
 
                 <h4 class="text-center">
-                    p ∧ q ∧ r ∧ s
+                    p ∧ q ∧ r ∧ s ∧ t
                 </h4>
 
                 <p class="mt-3">
                     Login hanya berhasil apabila username ditemukan,
-                    password benar, akun aktif, dan OTP valid.
+                    password benar, email telah diverifikasi,
+                    akun aktif, dan OTP berhasil diverifikasi.
                     Jika salah satu kondisi bernilai FALSE,
                     maka hasil akhir validasi login adalah FALSE.
                 </p>
