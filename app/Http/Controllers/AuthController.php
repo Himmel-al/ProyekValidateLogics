@@ -98,8 +98,6 @@ class AuthController extends Controller
         );
     }
 
-
-
     public function verifyEmail(Request $request)
     {
         $request->validate([
