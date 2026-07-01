@@ -34,9 +34,16 @@ Route::post('/otp-verification', [AuthController::class, 'verifyOtp'])
     ->name('otp.proses');
 
 
-Route::get('/dashboard', [AuthController::class, 'dashboard'])
-    ->middleware('auth')
-    ->name('dashboard');
+Route::middleware('auth')->group(function () {
+    Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/logout', [AuthController::class, 'logout'])
-    ->name('logout');
+    // Rooms
+    Route::resource('rooms', App\Http\Controllers\RoomController::class);
+
+    // Bookings
+    Route::get('bookings', [App\Http\Controllers\BookingController::class, 'index'])->name('bookings.index');
+    Route::get('bookings/create', [App\Http\Controllers\BookingController::class, 'create'])->name('bookings.create');
+    Route::post('bookings', [App\Http\Controllers\BookingController::class, 'store'])->name('bookings.store');
+    Route::post('bookings/{booking}/status', [App\Http\Controllers\BookingController::class, 'updateStatus'])->name('bookings.updateStatus');
+});

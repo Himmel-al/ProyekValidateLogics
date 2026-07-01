@@ -1,0 +1,740 @@
+﻿
+KATA PENGANTAR
+
+
+Puji dan syukur kami panjatkan ke hadirat Tuhan Yang Maha Esa, karena atas rahmat dan karunia-Nya, kami dapat menyelesaikan laporan project kelompok untuk matakuliah Matematika Diskrit ini yang berjudul "Sistem Validasi Login Berbasis Logika Matematika dan Himpunan (Studi Kasus: Portal Validasi Home Server)" tepat pada waktunya.
+
+
+Laporan ini disusun untuk memenuhi salah satu tugas kelompok pada matakuliah Matematika Diskrit. Melalui project ini, kami berusaha mengimplementasikan konsep-konsep abstrak matematika diskrit, seperti logika proposisi, teori himpunan, relasi, hingga kombinatorika, ke dalam sebuah sistem nyata yang sering digunakan dalam dunia teknologi informasi, yaitu sistem autentikasi dan keamanan login.
+
+
+Dalam penyusunan laporan ini, kami menyadari bahwa keberhasilan project ini tidak lepas dari bantuan, bimbingan, dan arahan dari berbagai pihak. Oleh karena itu, kami ingin menyampaikan terima kasih yang sebesar-besarnya kepada:
+
+
+1. Dosen Pengampu matakuliah Matematika Diskrit yang telah memberikan ilmu, arahan, dan bimbingan yang sangat berharga selama perkuliahan dan pengerjaan project ini.
+2. Rekan-rekan anggota kelompok yang telah bekerja sama dengan penuh dedikasi, soliditas, dan tanggung jawab sejak tahap perencanaan hingga penyelesaian laporan.
+3. Semua pihak yang tidak dapat kami sebutkan satu per satu, yang telah memberikan dukungan baik secara moral maupun material.
+
+
+Kami menyadari bahwa laporan ini masih jauh dari kata sempurna, baik dari segi penyusunan, tata bahasa, maupun kedalaman analisis. Oleh karena itu, kami sangat mengharapkan kritik dan saran yang membangun dari pembaca demi perbaikan dan penyempurnaan laporan di masa yang akan datang.
+
+
+Akhir kata, semoga laporan project ini dapat memberikan manfaat, menambah wawasan, dan menjadi referensi yang berguna bagi perkembangan ilmu pengetahuan, khususnya di bidang Teknik Informatika dan implementasi Matematika Diskrit.
+
+
+
+
+Pekanbaru, 15 Juni 2026
+Tim Penyusun (Kelompok 7)
+DAFTAR ISI
+KATA PENGANTAR        1
+DAFTAR ISI        4
+BAB I
+PENDAHULUAN        1
+1.1 Latar Belakang        1
+1.2 Rumusan Masalah        2
+1.3 Tujuan        2
+BAB II 
+DASAR TEORI        3
+2.1 Logika Matematika (Logika Proposisi)        3
+2.1.1 Proposisi dan Nilai Kebenaran        3
+2.1.2 Operator Logika (Hubungan Proposisi)        3
+2.1.3 Simbol Gerbang Logika        4
+2.1.4 Tabel Kebenaran        4
+2.2 Teori Himpunan dan Relasi        5
+2.2.1 Definisi Himpunan        5
+2.2.2 Relasi dan Pemetaan (Kardinalitas)        6
+2.3 Kombinatorika        6
+2.3.1 Kaidah Dasar Menghitung (Aturan Perkalian)        6
+2.4 Kriptografi Dasar        7
+2.4.1 Enkripsi dan Dekripsi        7
+2.4.2 Cipher Substitusi (Konsep Pergeseran)        7
+BAB III
+METODOLOGI        8
+3.1 Alur Pelaksanaan Project        8
+3.2 Metode Perancangan Sistem        8
+3.2.1. Logika Proposisional        8
+3.2.2 Teori Himpunan        9
+BAB IV
+PEMBAHASAN        10
+4.1 Definisi Masalah Utama dan Aturan Login        10
+4.2 Logika dan Himpunan        10
+4.3 Implementasi Kombinatorika        11
+4.4 Implementasi Kriptografi Sederhana        12
+BAB V
+HASIL DAN ANALISIS        13
+5.1 Hasil Implementasi Sistem        13
+5.2 Analisis Penerapan Logika Matematika        15
+5.3 Analisis Penerapan Teori Himpunan        15
+5.4 Analisis Kombinatorika pada OTP        16
+5.5 Analisis Pengamanan Password        16
+5.6 Evaluasi Sistem        16
+BAB VI
+KESIMPULAN DAN SARAN        17
+6.1 Kesimpulan        17
+6.2 Saran        17
+DAFTAR PUSTAKA        19
+LAMPIRAN        20
+BAB I
+PENDAHULUAN
+
+
+1.1 Latar Belakang
+Perkembangan teknologi informasi menyebabkan hampir seluruh layanan digital menerapkan sistem autentikasi untuk melindungi data dan hak akses pengguna. Mekanisme autentikasi yang paling umum digunakan adalah username dan password. Namun, mekanisme tersebut masih memiliki kelemahan karena kredensial pengguna dapat diketahui atau ditebak oleh pihak yang tidak berwenang. Oleh karena itu, diperlukan mekanisme validasi tambahan agar proses autentikasi menjadi lebih aman.
+Pada proyek ini, sistem autentikasi menerapkan konsep-konsep Matematika Diskrit, yaitu logika proposisional, teori himpunan, kombinatorika, dan kriptografi sederhana. Logika proposisional digunakan untuk memodelkan setiap kondisi autentikasi sebagai proposisi yang bernilai benar (true) atau salah (false). Misalkan ppp menyatakan username benar, qqq menyatakan password benar, rrr menyatakan email telah diverifikasi, sss menyatakan akun aktif, dan ttt menyatakan OTP valid. Pengguna memperoleh hak akses apabila seluruh proposisi bernilai benar, sehingga aturan login dinyatakan sebagai
+
+Teori himpunan digunakan untuk mengelompokkan pengguna berdasarkan status autentikasinya. Misalkan AAA adalah himpunan pengguna aktif, BBB adalah himpunan pengguna yang telah memverifikasi email, dan CCC adalah himpunan pengguna yang memiliki OTP valid. Pengguna hanya dapat mengakses sistem apabila menjadi anggota irisan ketiga himpunan tersebut, yaitu
+
+Selain itu, sistem menggunakan OTP enam digit sebagai lapisan keamanan tambahan. Banyaknya kemungkinan kode OTP adalah
+
+kombinasi. Password juga diamankan menggunakan metode Caesar Cipher sebelum disimpan ke dalam basis data.
+Berdasarkan uraian tersebut, proyek ini mengembangkan Sistem Validasi Login Berbasis Logika Matematika dan Himpunan sebagai implementasi konsep Matematika Diskrit dalam membangun sistem autentikasi yang lebih aman melalui validasi username, password, verifikasi email, status akun, dan OTP.
+1.2 Rumusan Masalah
+Berdasarkan latar belakang yang telah diuraikan, rumusan masalah dalam proyek ini adalah sebagai berikut.
+1. Bagaimana menerapkan konsep logika proposisional sebagai dasar pengambilan keputusan pada proses validasi login pengguna?
+2. Bagaimana menerapkan teori himpunan untuk menentukan pengguna yang berhak memperoleh akses ke dalam sistem?
+3. Bagaimana menerapkan konsep kombinatorika dalam menganalisis banyaknya kemungkinan kombinasi kode One Time Password (OTP)?
+4. Bagaimana menerapkan kriptografi sederhana untuk meningkatkan keamanan penyimpanan password pada sistem login?
+1.3 Tujuan
+
+
+Tujuan yang ingin dicapai dalam proyek ini adalah sebagai berikut.
+1. Mengimplementasikan konsep logika proposisional sebagai dasar pengambilan keputusan pada proses validasi login pengguna.
+2. Mengimplementasikan teori himpunan untuk mengelompokkan pengguna berdasarkan status autentikasi sehingga hak akses dapat ditentukan melalui operasi irisan himpunan.
+3. Menunjukkan penerapan konsep-konsep Matematika Diskrit dalam pengembangan sistem validasi login yang lebih aman dan terstruktur.
+
+
+
+
+________________
+BAB II 
+DASAR TEORI
+
+
+2.1 Logika Matematika (Logika Proposisi)
+
+
+Logika matematika merupakan salah satu cabang Matematika Diskrit yang mempelajari cara menentukan nilai kebenaran suatu pernyataan atau proposisi. Dalam sistem komputer, logika proposisional digunakan sebagai dasar pengambilan keputusan karena setiap kondisi hanya memiliki dua kemungkinan nilai, yaitu benar (true) atau salah (false). Pada sistem validasi login, logika proposisional digunakan untuk menentukan apakah pengguna telah memenuhi seluruh persyaratan autentikasi sebelum memperoleh hak akses ke dalam sistem.
+2.1.1 Proposisi dan Nilai Kebenaran
+Proposisi adalah kalimat deklaratif yang memiliki tepat satu nilai kebenaran, yaitu benar atau salah. Dalam penelitian ini setiap proses autentikasi direpresentasikan sebagai proposisi sebagai berikut.
+*  = Username ditemukan dalam basis data
+*  = Password sesuai
+*  = Email telah diverifikasi
+*  = Akun berstatus aktif.
+*  = OTP valid.
+Akses ke sistem diberikan apabila seluruh proposisi bernilai benar sehingga fungsi keputusan login dapat dinyatakan sebagai
+
+Apabila terdapat satu proposisi yang bernilai salah, maka pengguna tidak dapat melanjutkan proses autentikasi.
+
+
+
+
+
+
+
+
+
+
+
+
+2.1.2 Operator Logika (Hubungan Proposisi)
+Proposisi tunggal dapat dikombinasikan menggunakan operator logika untuk membentuk proposisi majemuk. Beberapa operator logika dasar yang digunakan dalam sistem validasi adalah:
+Operator 
+	Simbol 
+	Keterangan 
+	Contoh 
+	Konjungsi 
+	 (AND)
+	Bernilai benar jika semua proposisi bernilai benar
+	
+	Disjungsi 
+	 (OR)
+	Bernilai benar jika minimal satu proposisi bernilai benar
+	
+	Negasi 
+	 (NOT)
+	Membalikkan nilai kebenaran proposisi
+	
+	Implikasi 
+	
+	Bernilai salah jika p benar tetapi q salah
+	
+	    
+Pada sistem validasi login, operator yang digunakan adalah konjungsi (AND) karena seluruh kondisi autentikasi harus dipenuhi sebelum pengguna memperoleh hak akses ke dalam sistem. 
+2.1.3 Simbol Gerbang Logika
+  Gerbang logika merupakan representasi visual dari operator logika yang digunakan dalam sistem digital. Beberapa jenis gerbang logika yang umum digunakan adalah AND Gate, OR Gate, NOT Gate, NAND Gate, NOR Gate, XOR Gate, dan XNOR Gate. Masing-masing gerbang memiliki fungsi yang berbeda dalam menghasilkan keluaran berdasarkan nilai masukan yang diberikan.
+Pada sistem validasi login yang dikembangkan, gerbang logika yang digunakan adalah AND Gate. Hal ini karena proses autentikasi mensyaratkan seluruh kondisi harus terpenuhi sebelum pengguna memperoleh hak akses. Kondisi tersebut direpresentasikan oleh proposisi ppp, qqq, rrr, sss, dan ttt, sehingga aturan login dinyatakan sebagai
+
+Dengan demikian, apabila salah satu kondisi bernilai salah, maka hasil evaluasi juga bernilai salah dan proses login tidak dapat dilanjutkan. 
+2.1.4 Tabel Kebenaran
+Tabel kebenaran digunakan untuk menunjukkan seluruh kemungkinan nilai kebenaran dari suatu proposisi majemuk. Jika terdapat nnn proposisi, maka banyak kombinasi nilai kebenarannya adalah
+.
+Pada sistem ini digunakan lima proposisi sehingga secara teoritis terdapat
+
+Keterangan: 
+   *  = Username benar
+   *  = Password benar
+   *  = Email sudah diverifikasi
+   *  = Akun aktif
+   *  = OTP valid
+NO
+	p
+	q
+	r
+	s
+	t
+	
+	Hasil
+	1
+	F
+	F
+	F
+	F
+	F
+	F
+	User tidak ditemukan
+	2
+	T
+	F
+	F
+	F
+	F
+	F
+	Password Salah
+	3
+	T
+	T
+	F
+	F
+	F
+	F
+	Perlu verifikasi email
+	4
+	T
+	T
+	T
+	F
+	F
+	F
+	Akun belum aktif
+	5
+	T
+	T
+	T
+	
+
+	F
+	F
+	OTP salah atau kadaluarsa
+	6
+	T
+	T
+	T
+	T
+	T
+	T
+	Login berhasil
+	Berdasarkan tabel tersebut, proses login hanya berhasil apabila seluruh proposisi bernilai benar. Sebaliknya, jika terdapat satu proposisi yang bernilai salah, maka sistem akan menghentikan proses autentikasi dan menampilkan pesan sesuai kondisi yang terjadi.
+2.2 Teori Himpunan dan Relasi
+Teori himpunan merupakan cabang Matematika Diskrit yang mempelajari kumpulan objek yang terdefinisi dengan jelas. Dalam sistem informasi, teori himpunan digunakan untuk mengelompokkan data berdasarkan karakteristik tertentu sehingga mempermudah proses pengambilan keputusan. Pada sistem validasi login, teori himpunan digunakan untuk mengelompokkan pengguna berdasarkan status autentikasi yang dimilikinya. 
+2.2.1 Definisi Himpunan
+Himpunan merupakan kumpulan objek yang dapat ditentukan dengan jelas apakah suatu objek merupakan anggota himpunan tersebut atau bukan. Dalam Matematika Diskrit, terdapat beberapa operasi himpunan yang digunakan untuk menunjukkan hubungan antar himpunan, yaitu irisan, gabungan, komplemen, dan selisih. Operasi-operasi tersebut disajikan pada Tabel 2.3 sebagai dasar teori yang mendukung pembahasan. 
+Operasi 
+	Simbol 
+	Pengertian 
+	Contoh 
+	Irisan 
+	
+	Himpunan yang anggotanya merupakan anggota yang sama pada dua himpunan atau lebih. 
+	C = {2, 4, 6, 8}
+D = {1, 2, 3, 4, 5, 6}
+ = {2, 4, 6}
+	Gabungan 
+	
+	Himpunan yang berisi seluruh anggota dari dua himpunan atau lebih tanpa pengulangan anggota.
+	C = {2, 4, 6, 8}
+D = {1, 2, 3, 4, 5, 6}
+ = {1, 2, 3, 4, 5, 6, 8}
+	Komplemen 
+	A’ atau Ac
+	Himpunan yang berisi anggota semesta yang bukan anggota himpunan tertentu.
+	S = {A, K, U, B, L, J, R}
+B = {A, B, L, J}
+Bc = {K, U, R}
+
+
+	Selisih 
+	A - B
+	Himpunan yang berisi anggota A yang tidak terdapat pada himpunan B. 
+	A = {1, 3, 5, 7, 9, 11}
+B = {1, 3, 7, 9}
+A − B = {5, 11}
+	Pada sistem validasi login yang dikembangkan, operasi himpunan yang diterapkan adalah irisan (∩). Misalkan:
+
+
+
+Pengguna memperoleh hak akses apabila menjadi anggota irisan ketiga himpunan tersebut, yaitu
+
+Dengan demikian, hanya pengguna yang memenuhi seluruh persyaratan autentikasi yang dapat mengakses sistem. 
+
+
+2.2.2 Relasi dan Pemetaan (Kardinalitas)
+Relasi merupakan hubungan antara anggota suatu himpunan dengan anggota himpunan lainnya. Secara matematis, relasi RRR dari himpunan AAA ke himpunan BBB merupakan himpunan bagian dari hasil kali Kartesius A×BA\times BA×B.
+Pada sistem login, relasi digunakan untuk menghubungkan pengguna dengan hak akses yang dimilikinya. Setiap pengguna dipetakan ke peran (role) tertentu sehingga sistem dapat menentukan halaman atau fitur yang dapat diakses setelah proses autentikasi berhasil dilakukan.
+2.3 Kombinatorika
+Kombinatorika adalah cabang matematika diskrit yang mempelajari pengaturan, penyusunan, dan penghitungan objek-objek tanpa harus mendaftar seluruh anggotanya satu per satu.
+2.3.1 Kaidah Dasar Menghitung (Aturan Perkalian)
+Jika suatu prosedur dapat dipecah menjadi  tahap berturut-turut, di mana tahap pertama dapat dilakukan dengan  cara, tahap kedua dengan  cara, dan seterusnya hingga tahap ke- dengan  cara, maka total cara untuk menyelesaikan prosedur tersebut secara keseluruhan adalah:
+
+Dalam arsitektur keamanan, aturan ini digunakan untuk menghitung ruang kunci (keyspace) dari sebuah token OTP (One-Time Password). Semakin besar variasi kombinasi yang dihasilkan, semakin rendah probabilitas keberhasilan serangan berbasis tebakan (brute-force attack).
+2.4 Kriptografi Dasar
+Kriptografi adalah ilmu dan seni untuk menjaga keamanan pesan dengan cara menyamarkannya menjadi bentuk yang tidak dapat dipahami oleh pihak yang tidak berhak.
+2.4.1 Enkripsi dan Dekripsi
+      * Plaintext: Data asli atau pesan mentah yang dapat dibaca (misalnya kata sandi asli pengguna sebelum disimpan).
+      * Ciphertext: Data hasil penyamaran yang tampak acak dan tidak dapat dibaca secara langsung.
+      * Enkripsi: Proses mengubah plaintext menjadi ciphertext.
+      * Dekripsi: Proses mengembalikan ciphertext menjadi plaintext menggunakan kunci tertentu.
+2.4.2 Cipher Substitusi (Konsep Pergeseran)
+Salah satu teknik kriptografi klasik yang paling mendasar adalah Caesar Cipher, yaitu algoritma substitusi yang menggeser posisi karakter berdasarkan nilai numerik tertentu () menggunakan aritmatika modular:
+
+Di mana  adalah karakter sandi,  adalah karakter asli,  adalah kunci pergeseran, dan  adalah jumlah total alfabet atau basis karakter yang digunakan (misalnya 26 untuk huruf alfabet, atau 256 jika menggunakan basis karakter ASCII).
+________________
+BAB III
+METODOLOGI
+3.1 Alur Pelaksanaan Project
+Project ini dikembangkan menggunakan framework Laravel dengan pendekatan implementasi konsep Matematika Diskrit pada sistem autentikasi pengguna. Sistem dirancang untuk melakukan validasi login secara berlapis melalui verifikasi email dan autentikasi OTP (One Time Password). Tahapan proses sistem adalah sebagai berikut:
+      1. Pengguna memasukkan username dan password pada halaman login.
+      2. Sistem melakukan validasi username dan password menggunakan logika proposisional.
+      3. Jika username atau password salah, sistem menampilkan pesan kesalahan.
+      4. Jika username dan password benar, sistem memeriksa status verifikasi email pengguna.
+      5. Jika email belum diverifikasi, pengguna diminta memasukkan alamat email.
+      6. Sistem mengirimkan kode verifikasi ke email yang dimasukkan.
+      7. Pengguna memasukkan kode verifikasi email.
+      8. Jika kode verifikasi benar, status email_verified diubah menjadi true dan status akun is_active diubah menjadi true.
+      9. Sistem mengirimkan OTP login ke email yang telah diverifikasi.
+      10. Pengguna memasukkan kode OTP.
+      11. Sistem memvalidasi OTP dan masa berlakunya.
+      12. Jika OTP valid, pengguna diberikan akses ke dashboard sistem.
+3.2 Metode Perancangan Sistem
+Perancangan sistem dilakukan dengan memanfaatkan konsep Logika Matematika dan Teori Himpunan sebagai dasar dalam proses autentikasi pengguna.
+3.2.1. Logika Proposisional
+Sistem menggunakan beberapa proposisi sebagai berikut:
+      * p = Username ditemukan dalam basis data.
+      * q = Password yang dimasukkan sesuai dengan password yang tersimpan.
+      * r = Email telah diverifikasi.
+      * s = Akun pengguna aktif.
+      * t = OTP valid dan belum kadaluarsa.
+Akses ke sistem diberikan jika seluruh proposisi bernilai benar:
+ 
+3.2.2 Teori Himpunan
+Dalam sistem ini didefinisikan tiga himpunan pengguna:
+A = Himpunan pengguna aktif.
+B = Himpunan pengguna yang telah melakukan verifikasi email.
+C = Himpunan pengguna yang berhasil melakukan verifikasi OTP.
+Pengguna hanya dapat mengakses sistem apabila menjadi anggota dari irisan ketiga himpunan tersebut:
+A ∩ B ∩ C
+Dengan demikian proses autentikasi tidak hanya memeriksa identitas pengguna, tetapi juga memastikan bahwa pengguna telah memenuhi seluruh persyaratan keamanan yang ditentukan.
+________________
+
+
+BAB IV
+PEMBAHASAN
+
+
+4.1 Definisi Masalah Utama dan Aturan Login
+Sistem login merupakan mekanisme yang digunakan untuk memverifikasi identitas pengguna sebelum diberikan akses ke dalam suatu aplikasi. Pada sistem login konvensional, proses autentikasi umumnya hanya menggunakan username dan password. Metode tersebut memiliki kelemahan karena apabila username dan password diketahui oleh pihak lain, maka akun dapat diakses tanpa adanya verifikasi tambahan.
+Dari permasalahan tersebut, diperlukan suatu mekanisme validasi login yang lebih aman dengan menerapkan konsep Logika Matematika dan Himpunan. Sistem yang dikembangkan tidak hanya memeriksa kebenaran username dan password, tetapi juga memverifikasi status akun, status verifikasi email, dan validitas One Time Password (OTP). Dengan demikian, pengguna harus memenuhi seluruh syarat yang telah ditentukan sebelum memperoleh akses ke dalam sistem.
+Penerapan konsep Matematika Diskrit pada sistem ini bertujuan untuk menunjukkan bagaimana operasi himpunan dan logika proposisional dapat digunakan dalam proses pengambilan keputusan pada sistem autentikasi pengguna.
+4.2 Logika dan Himpunan
+Pada sistem yang dibangun, proses login dimulai dengan validasi username dan password. Username direpresentasikan sebagai proposisi p dan password direpresentasikan sebagai proposisi q. Jika salah satu proposisi bernilai salah, maka proses login langsung dihentikan. Selanjutnya sistem memeriksa apakah email pengguna telah diverifikasi. Kondisi ini direpresentasikan oleh proposisi r. Jika email belum diverifikasi, pengguna diwajibkan memasukkan alamat email dan melakukan proses verifikasi melalui kode yang dikirimkan ke email tersebut.
+Setelah email berhasil diverifikasi, sistem secara otomatis mengubah status akun menjadi aktif. Kondisi ini direpresentasikan sebagai proposisi s. Tahap berikutnya adalah pengiriman OTP ke email pengguna. OTP yang dimasukkan pengguna akan dibandingkan dengan OTP yang tersimpan pada basis data serta diperiksa masa berlakunya. Kondisi ini direpresentasikan sebagai proposisi t.
+Dengan demikian, syarat agar pengguna dapat masuk ke dashboard adalah:
+
+Berdasarkan tabel di atas, login hanya berhasil apabila semua kondisi bernilai benar. Jika terdapat satu saja kondisi yang bernilai salah, maka pengguna tidak dapat masuk ke sistem. Misalnya, ketika password salah maka proses login langsung dihentikan. Begitu juga jika email belum diverifikasi, akun belum aktif, atau OTP yang dimasukkan tidak sesuai.
+4.2.1 Himpunan
+Penerapan teori himpunan digunakan untuk memodelkan kelompok pengguna berdasarkan status autentikasinya.
+A = {pengguna aktif}
+B = {pengguna yang telah memverifikasi email}
+C = {pengguna yang memiliki OTP valid}
+Misalkan terdapat pengguna bernama Budi.
+Sebelum melakukan verifikasi email:
+Budi ∉ A
+Budi ∉ B
+Setelah berhasil melakukan verifikasi email:
+Budi ∈ A
+Budi ∈ B
+Setelah berhasil memasukkan OTP:
+Budi ∈ C
+Sehingga:
+Budi ∈ A ∩ B ∩ C
+Karena berada pada irisan ketiga himpunan tersebut, maka Budi diperbolehkan mengakses dashboard.
+
+
+4.3 Implementasi Kombinatorika 
+Sistem menghasilkan OTP sebanyak enam digit menggunakan bilangan acak dari 100000 hingga 999999.
+Jumlah kemungkinan kombinasi OTP adalah:
+999999 − 100000 + 1 = 900000 kombinasi
+Banyaknya kemungkinan kombinasi tersebut memperkecil peluang seseorang menebak OTP secara benar dalam satu percobaan.
+4.4 Implementasi Kriptografi Sederhana
+Password pengguna tidak disimpan dalam bentuk asli, tetapi melalui proses enkripsi Caesar Cipher dengan pergeseran karakter sebesar tujuh posisi.
+Proses enkripsi:
+
+Proses dekripsi:
+
+Dengan mekanisme ini password yang tersimpan pada basis data tidak dapat langsung dibaca oleh pengguna lain.
+
+
+
+
+
+
+________________
+
+
+BAB V
+HASIL DAN ANALISIS
+5.1 Hasil Implementasi Sistem
+Setelah proses perancangan dan pengembangan selesai dilakukan, sistem validasi login berhasil dijalankan sesuai dengan alur yang telah dirancang. Sistem dibangun menggunakan framework Laravel dan mampu melakukan autentikasi pengguna melalui beberapa tahapan validasi, yaitu pemeriksaan username dan password, verifikasi email, aktivasi akun, serta verifikasi OTP (One Time Password).
+Pada tahap awal, pengguna memasukkan username dan password ke dalam sistem. Apabila data yang dimasukkan sesuai dengan data yang tersimpan pada basis data, sistem akan melanjutkan proses pemeriksaan status verifikasi email. Pengguna yang belum memiliki email terverifikasi akan diarahkan untuk melakukan verifikasi terlebih dahulu melalui kode yang dikirimkan ke alamat email yang dimasukkan.
+  
+
+Gambar 5.1 Interface login user
+  
+
+Gambar 5.2 Verifikasi email akun user
+Setelah proses verifikasi email berhasil dilakukan, sistem secara otomatis memperbarui status akun menjadi aktif. Selanjutnya sistem mengirimkan kode OTP ke alamat email pengguna sebagai lapisan keamanan tambahan. Pengguna yang berhasil memasukkan OTP yang sesuai dan masih berada dalam masa berlaku akan memperoleh akses ke halaman dashboard.
+  
+
+Gambar 5.3 OTP login akun user
+Berdasarkan hasil pengujian yang dilakukan, seluruh tahapan validasi dapat berjalan sesuai dengan aturan yang telah ditentukan. Sistem mampu membedakan kondisi pengguna yang belum terverifikasi, pengguna yang telah aktif, maupun pengguna yang gagal pada proses OTP.
+  
+
+Gambar 5.4 Verifikasi email akun user
+5.2 Analisis Penerapan Logika Matematika
+Konsep logika matematika diterapkan pada proses pengambilan keputusan selama autentikasi berlangsung. Setiap kondisi validasi direpresentasikan dalam bentuk proposisi yang memiliki nilai benar atau salah. Proposisi yang digunakan meliputi:
+      * p = Username ditemukan dalam basis data
+      * q = Password sesuai dalam basis data
+      * r = Email telah diverifikasi dan tersimpan di basis data.
+      * s = Akun berstatus aktif
+      * t = OTP valid dengan yang ada di basis data
+Akses ke sistem diberikan apabila seluruh proposisi bernilai benar. Hubungan tersebut dapat dituliskan sebagai:
+
+Berdasarkan hasil pengujian, sistem menunjukkan bahwa kegagalan pada salah satu proposisi menyebabkan proses login dihentikan. Sebagai contoh, ketika password yang dimasukkan tidak sesuai, maka nilai q menjadi salah dan pengguna tidak dapat melanjutkan ke tahap berikutnya. Itu juga akan terjadi ketika email belum diverifikasi atau OTP yang dimasukkan tidak sesuai.
+5.3 Analisis Penerapan Teori Himpunan
+Konsep himpunan digunakan untuk mengelompokkan pengguna berdasarkan status autentikasi yang dimiliki. Himpunan yang digunakan adalah:
+      * A = Himpunan pengguna aktif
+      * B = Himpunan pengguna yang telah memverifikasi email
+      * C = Himpunan pengguna yang memiliki OTP valid
+Pengguna hanya dapat mengakses sistem apabila menjadi anggota dari ketiga himpunan tersebut secara bersamaan. Kondisi ini dinyatakan sebagai:
+
+Penerapan konsep ini terlihat pada proses login. Pengguna yang belum melakukan verifikasi email belum termasuk dalam himpunan B sehingga akses tidak diberikan. Setelah proses verifikasi email berhasil dilakukan, pengguna menjadi anggota himpunan A dan B. Selanjutnya setelah OTP berhasil diverifikasi, pengguna menjadi anggota himpunan C sehingga memenuhi syarat untuk masuk ke dalam irisan ketiga himpunan.
+5.4 Analisis Kombinatorika pada OTP
+Kode OTP yang digunakan pada sistem terdiri dari enam digit angka yang dibuat secara acak oleh sistem. Rentang angka yang digunakan adalah 100000 sampai dengan 999999. Jumlah kemungkinan kombinasi yang dapat dihasilkan adalah:
+
+Dengan jumlah kombinasi tersebut, peluang seseorang menebak OTP yang benar dalam satu kali percobaan menjadi sangat kecil. Semakin banyak kombinasi yang tersedia, semakin tinggi tingkat kesulitan untuk memperoleh kode yang benar tanpa melalui proses pengiriman email yang sah.
+5.5 Analisis Pengamanan Password
+Selain menggunakan OTP, sistem juga menerapkan penyimpanan password dalam bentuk terenkripsi. Password tidak disimpan secara langsung, melainkan melalui proses pergeseran karakter menggunakan metode Caesar Cipher dengan nilai pergeseran tertentu. Melalui mekanisme ini, data password yang tersimpan pada basis data tidak dapat dibaca secara langsung oleh pengguna lain. Walaupun metode yang digunakan masih tergolong sederhana, penerapan tersebut telah menunjukkan bagaimana konsep dasar kriptografi dapat dimanfaatkan dalam proses pengamanan data. Berdasarkan hasil pengujian, proses enkripsi dan dekripsi berjalan dengan baik sehingga sistem dapat melakukan pencocokan password tanpa menyimpan data asli dalam bentuk terbuka.
+5.6 Evaluasi Sistem
+Secara umum sistem yang dikembangkan telah mampu mengintegrasikan konsep logika matematika, teori himpunan, kombinatorika, dan kriptografi ke dalam satu alur autentikasi yang saling berkaitan. Setiap tahapan validasi memiliki fungsi yang berbeda namun saling mendukung untuk meningkatkan keamanan akses pengguna. Hasil pengujian menunjukkan bahwa sistem dapat mengidentifikasi berbagai kondisi login, seperti username tidak ditemukan, password salah, email belum diverifikasi, akun belum aktif, maupun OTP yang tidak valid. Dengan demikian, tujuan utama project untuk menerapkan konsep Matematika Diskrit ke dalam sistem validasi login dapat tercapai dengan baik.
+________________
+
+
+BAB VI
+KESIMPULAN DAN SARAN
+6.1 Kesimpulan
+Berdasarkan hasil perancangan, implementasi, dan pengujian yang telah dilakukan, sistem validasi login berbasis logika matematika dan himpunan berhasil dikembangkan sesuai dengan tujuan proyek. Sistem mampu melakukan proses autentikasi pengguna melalui beberapa tahapan validasi yang meliputi pemeriksaan username dan password, verifikasi email, aktivasi akun, serta verifikasi OTP sebelum pengguna memperoleh akses ke dalam sistem. Penerapan konsep logika matematika digunakan dalam proses pengambilan keputusan selama autentikasi berlangsung. Setiap tahapan validasi direpresentasikan dalam bentuk proposisi logika yang harus terpenuhi agar pengguna dapat melanjutkan ke tahap berikutnya. Dengan pendekatan tersebut, proses login menjadi lebih terstruktur dan mudah dianalisis.
+Konsep himpunan diterapkan melalui pengelompokan pengguna berdasarkan status yang dimiliki, yaitu pengguna aktif, pengguna yang telah memverifikasi email, dan pengguna yang memiliki OTP valid. Pengguna hanya dapat mengakses sistem apabila memenuhi seluruh syarat yang ditentukan sehingga menjadi anggota dari irisan ketiga himpunan tersebut. Selain itu, penggunaan OTP memberikan lapisan keamanan tambahan karena kode yang dikirimkan bersifat sementara dan hanya berlaku dalam jangka waktu tertentu. Penerapan enkripsi password juga membantu menjaga kerahasiaan data pengguna yang tersimpan di dalam basis data.
+Secara keseluruhan, proyek ini menunjukkan bahwa konsep-konsep dalam Matematika Diskrit, seperti logika proposisional, teori himpunan, kombinatorika, dan kriptografi sederhana, dapat diterapkan secara nyata dalam pengembangan sistem autentikasi pengguna.
+6.2 Saran
+Meskipun sistem telah berjalan sesuai dengan kebutuhan yang dirancang, masih terdapat beberapa pengembangan yang dapat dilakukan untuk meningkatkan kualitas dan keamanan sistem.
+      1. Menambahkan fitur pembatasan percobaan login untuk mencegah upaya akses yang dilakukan secara berulang dengan kombinasi username dan password yang salah.
+      2. Menyediakan fitur lupa password yang memungkinkan pengguna melakukan penggantian kata sandi melalui email yang telah terdaftar.
+      3. Menggunakan algoritma enkripsi yang lebih kuat dan sesuai dengan standar keamanan modern agar perlindungan terhadap data pengguna menjadi lebih optimal.
+      4. Menambahkan pencatatan aktivitas login sehingga riwayat akses pengguna dapat dipantau dan digunakan sebagai bahan evaluasi keamanan sistem.
+      5. Mengembangkan tampilan antarmuka yang lebih responsif.
+      6. Menambahkan penerapan konsep Matematika Diskrit lainnya, seperti relasi, fungsi, atau pohon keputusan, agar sistem memiliki variasi penerapan konsep yang lebih luas.
+Dengan adanya pengembangan tersebut, sistem diharapkan dapat memberikan tingkat keamanan yang lebih baik sekaligus menjadi contoh penerapan konsep Matematika Diskrit yang lebih lengkap dalam pengembangan perangkat lunak.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+DAFTAR PUSTAKA
+Maskhuliah, P., Rumaf, D. M., & Hayoto, F. N. (2025). Konsep himpunan dalam matematika: Definisi, penyajian, jenis, dan sifat operasi. Aljabar: Jurnal Ilmuan Pendidikan, Matematika dan Kebumian, 5(1), 1-10.
+
+
+Munir, R. (2018). Matematika diskrit (Edisi revisi). Informatika.
+
+
+Quipper. (n.d.). Operasi himpunan: Pengertian, jenis, dan contohnya. https://www.quipper.com/id/blog/mapel/matematika/operasi-himpunan/
+
+
+Wati, O. L., Desviona, N., Permasari, N., Alfikri, M. D., & Shah, R. A. R. (2026). Konsep himpunan dalam matematika diskrit. Algoritma: Jurnal Matematika, Ilmu Pengetahuan Alam, Kebumian dan Angkasa, 4(1), 44-51. https://doi.org/10.62383/algoritma.v4i1.922
+________________
+
+
+LAMPIRAN
+Lampiran kode program dapat diakses melalui tautan berikut ini:
+https://drive.google.com/drive/folders/1XUMRBbFUWqY0lxZpqPyj8289NF9w3GPJ?usp=sharing.
+
+
+
+No 
+	Simbol / Notasi
+	Nama
+	Fungsi 
+	1
+	
+	Konjungsi 
+	DAN (AND), benar jika semua proposisi bernilai benar 
+	2
+	
+	Disjungsi 
+	ATAU (OR), benar jika minimal satu proposisi bernilai benar 
+	3
+	
+	Negasi 
+	TIDAK (NOT), membalik nilai kebenaran proposisi 
+	4
+	
+	Implikasi 
+	JIKA...MAKA (IF...THEN) 
+	5
+	
+	Biimplikasi 
+	JIKA DAN HANYA JIKA (IF) 
+	6
+	
+	Irisan 
+	Elemen yang terdapat pada dua atau lebih himpunan 
+	7
+	
+	Gabungan 
+	Semua elemen dari dua atau lebih himpunan 
+	8
+	
+	Subset 
+	Himpunan bagian dari himpunan lain 
+	9
+	
+	Keanggotaan 
+	Merupakan anggota suatu himpunan 
+	10
+	mod
+	Modulo 
+	Operasi sisa hasil pembagian pada kriptografi 
+	Lampiran 1.1 Tabel daftar simbol dan notasi
+  
+
+Lampiran 1.2 Flowchart aplikasi
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Tahap pelaksanaan
+	Tanggal
+	Aktivitas 
+	Anggota yang berkontribusi
+	Hasil / Output Tahapan
+	Tahap 1, definisi masalah
+	16 Juni 2026
+	Merumuskan masalah untuk alur login aplikasi
+	Ridho, Lady, Hafiz, Najah
+	Permasalahan dan flow yang akan diterapkan
+	Tahap 2, merancang logika aplikasi
+	16 Juni 2026
+	Membuat tabel kebenaran berdasarkan permasalahan
+	Lady, Najah
+	Tabel kebenaran, himpunan dan relasi
+	Tahap 3, menerapkan kode program
+	16 Juni 2026
+	Menyusun kode program untuk menyelesaikan permasalahan
+	Ridho, Hafiz
+	Kode program
+	Tahap 4, dokumentasi
+	21 Juni 2026
+	Membuat laporan proyek
+	Ridho, Lady, Hafiz, Najah
+	File laporan proyek
+	Tahap 5, testing
+	23 Juni 2026
+	Melakukan pengujian aplikasi
+	Ridho, Hafiz
+	Perbaikan langsung pada kesalahan kode
+	Lampiran 1.3 Log proses
+
+
+
+
+  
+
+Lampiran 1.4 Tampilan email verifikasi
+
+
+  
+
+Lampiran 1.5 Email kode OTP
+
+
+
+
+
+
+
+
+  
+  
+
+  
+  
+
+Lampiran 1.6 Bukti diskusi tim
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Pada fungsi kode ini digunakan untuk menampilkan view login pada saat kita membuka webnya. 
+  
+
+
+
+Fungsi login ini melakukan validasi input username dan password, lalu mencari data user di database berdasarkan username. Kemudian mengecek apakah user ditemukan, jika iya maka akan dinyatakan true. mendekripsi password yang tersimpan di database lalu dibandingkan dengan password yang diinput user. Jika user tidak ditemukan kembali ke halaman sebelumnya dan menampilkan error. 
+  
+
+kode ini menangani validasi password dan langkah setelah login berhasil. 
+  
+
+
+
+Menampilkan view form email.
+  
+
+________________
+
+
+Fungsi kirimVerifikasiEmail() ini bertugas mengirim link verifikasi ke email user yang belum terverifikasi.
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+  
+
+  
+
+________________
+
+
+Kode ini adalah model User yang extends Authenticatable (model autentikasi Laravel). Bagian $fillable mendefinisikan kolom-kolom yang boleh diisi secara mass-assignment (username, password, role_id, email, email_verified, is_active, otp_code, otp_expired_at).
+Fungsi customEncrypt() adalah method enkripsi password buatan sendiri. setiap karakter password diambil nilai ASCII-nya (ord), ditambah $key = 7, lalu di-modulo 256 dan dikonversi balik ke karakter (chr). Hasilnya digabung jadi string lalu di-encode dengan base64_encode.
+  
+
+________________
+
+
+Lanjutan dari model User ini berisi method-method pendukung autentikasi. customDecrypt() adalah kebalikan dari customEncrypt(). men-decode base64, lalu mengembalikan setiap karakter ke nilai aslinya dengan mengurangi $key = 7 (ditambah 256 untuk menghindari nilai negatif sebelum modulo), sehingga password terenkripsi bisa dibalik ke bentuk asli.
+  
+
+ii

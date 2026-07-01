@@ -59,4 +59,14 @@ class User extends Authenticatable
         return $this->otp_expired_at &&
                now()->lt($this->otp_expired_at);
     }
+
+    public function bookings()
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    public function isAdmin()
+    {
+        return $this->role_id === 1; // Assuming 1 is Admin
+    }
 }
